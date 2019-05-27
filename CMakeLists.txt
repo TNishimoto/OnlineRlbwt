@@ -40,24 +40,28 @@ include_directories(${MYMOD_SOURCE_DIR}/BTree)
 
 
 #### Executable
-add_executable(OnlineRlbwt OnlineRlbwt.cpp)
-target_link_libraries(OnlineRlbwt Basics)
-target_link_libraries(OnlineRlbwt BTree)
+#add_executable(OnlineRlbwt OnlineRlbwt.cpp)
+#target_link_libraries(OnlineRlbwt Basics)
+#target_link_libraries(OnlineRlbwt BTree)
 
-add_executable(OnlineLz77ViaRlbwt OnlineLz77ViaRlbwt.cpp)
-target_link_libraries(OnlineLz77ViaRlbwt Basics)
-target_link_libraries(OnlineLz77ViaRlbwt BTree)
+#add_executable(OnlineLz77ViaRlbwt OnlineLz77ViaRlbwt.cpp)
+#target_link_libraries(OnlineLz77ViaRlbwt Basics)
+#target_link_libraries(OnlineLz77ViaRlbwt BTree)
 
-add_executable(DecompressLz77 DecompressLz77.cpp)
+#add_executable(DecompressLz77 DecompressLz77.cpp)
 
-add_executable(OnlineRindex OnlineRindex.cpp)
-target_link_libraries(OnlineRindex Basics)
-target_link_libraries(OnlineRindex BTree)
+#add_executable(OnlineRindex OnlineRindex.cpp)
+#target_link_libraries(OnlineRindex Basics)
+#target_link_libraries(OnlineRindex BTree)
 
-add_executable(OnlineRindex_Demo OnlineRindex_Demo.cpp)
-target_link_libraries(OnlineRindex_Demo Basics)
-target_link_libraries(OnlineRindex_Demo BTree)
+#add_executable(OnlineRindex_Demo OnlineRindex_Demo.cpp)
+#target_link_libraries(OnlineRindex_Demo Basics)
+#target_link_libraries(OnlineRindex_Demo BTree)
 
+
+add_library(online_rlbwt STATIC online_rlbwt.cpp)
+target_link_libraries(online_rlbwt Basics)
+target_link_libraries(online_rlbwt BTree)
 
 
 #### TEST
