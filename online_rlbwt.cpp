@@ -17,6 +17,7 @@
 #include <iomanip>
 #include <chrono>
 #include <exception>
+#include <cassert>
 
 //#include "cmdline.h"
 #include "OnlineRlbwt.hpp"
@@ -37,10 +38,15 @@ class backward_ifstream
     int64_t local_pos;
     static const int64_t BufferSize = 8092;
 
-
 public:
     backward_ifstream(std::string filepath) : ifs(filepath)
     {
+        if (!ifs)
+        {
+            std::string msg = "error reading file: " + filepath;
+            throw std::logic_error(msg);
+        }
+
         ifs.seekg(0, std::ios::end);
         uint64_t textSize = (uint64_t)ifs.tellg() / sizeof(char);
         ifs.seekg(0, std::ios::end);
@@ -52,38 +58,44 @@ public:
         //std::cout << this->buffer.size() << "/" <<  backward_ifstream::BufferSize<< std::endl;
         //std::cout << this->is_end() << std::endl;
         //for(int64_t i=local_pos;i>=0;i--){
-            //std::cout << std::to_string(this->buffer[i]) << "," ;
-            //std::cout << (this->buffer[i] == 0 ? '0' : this->buffer[i]);
+        //std::cout << std::to_string(this->buffer[i]) << "," ;
+        //std::cout << (this->buffer[i] == 0 ? '0' : this->buffer[i]);
         //}
         //std::cout << std::endl;
-
     }
-    uint64_t size()
+    int64_t size()
     {
         return this->_size;
     }
-    uint64_t rest_size(){
+    int64_t rest_size()
+    {
         return this->_size - this->pos;
     }
     bool buffering()
     {
         //this->buffer.clear();
-        if(pos != this->_size){
+        if (pos != this->_size)
+        {
             uint64_t _rest_size = this->rest_size();
-            if( _rest_size < backward_ifstream::BufferSize){
-                ifs.seekg(this->_size-(pos + _rest_size), std::ios::beg);
-                ifs.read((char *)&(this->buffer)[0],  _rest_size * sizeof(char));
-                pos +=  _rest_size;
-                this->local_pos =  _rest_size-1;
-
-            } else{
-                ifs.seekg(this->_size-(pos + backward_ifstream::BufferSize), std::ios::beg);
+            if (_rest_size < backward_ifstream::BufferSize)
+            {
+                ifs.seekg(this->_size - (pos + _rest_size), std::ios::beg);
+                ifs.read((char *)&(this->buffer)[0], _rest_size * sizeof(char));
+                pos += _rest_size;
+                this->local_pos = _rest_size - 1;
+            }
+            else
+            {
+                ifs.seekg(this->_size - (pos + backward_ifstream::BufferSize), std::ios::beg);
                 ifs.read((char *)&(this->buffer)[0], backward_ifstream::BufferSize * sizeof(char));
                 pos += backward_ifstream::BufferSize;
-                this->local_pos = backward_ifstream::BufferSize-1;
+                this->local_pos = backward_ifstream::BufferSize - 1;
             }
+            assert(pos <= this->size());
             return true;
-        }else{
+        }
+        else
+        {
             return false;
         }
     }
@@ -91,9 +103,11 @@ public:
     void get(char &c)
     {
         //std::cout << pos << "/" << this->local_pos << "/" << this->_size << std::endl;
-        if(this->local_pos == -1){
+        if (this->local_pos == -1)
+        {
             bool b = this->buffering();
-            if(!b){
+            if (!b)
+            {
                 throw std::logic_error("error!");
             }
         }
@@ -103,11 +117,11 @@ public:
     {
         ifs.close();
     }
-    bool is_end(){
+    bool is_end()
+    {
         return pos == this->_size && this->local_pos == -1;
     }
 };
-
 
 template <typename INDEX>
 bool online_rlbwt(std::string &text, std::vector<char> &outputCharVec, std::vector<INDEX> &outputNumVec, int outputType)
@@ -176,13 +190,16 @@ template bool online_rlbwt<uint64_t>(std::string &text, std::vector<char> &outpu
 template bool online_rlbwt<int32_t>(std::string &text, std::vector<char> &outputCharVec, std::vector<int32_t> &outputNumVec, int outputType);
 template bool online_rlbwt<int64_t>(std::string &text, std::vector<char> &outputCharVec, std::vector<int64_t> &outputNumVec, int outputType);
 
-std::string online_bwt(std::string &text){
+std::string online_bwt(std::string &text)
+{
     std::vector<char> cVec;
     std::vector<uint64_t> nVec;
     online_rlbwt(text, cVec, nVec, 0);
     std::string s;
-    for(uint64_t i=0;i<cVec.size();i++){
-        for(uint64_t x=0;x<nVec[i];x++){
+    for (uint64_t i = 0; i < cVec.size(); i++)
+    {
+        for (uint64_t x = 0; x < nVec[i]; x++)
+        {
             s.push_back(cVec[i]);
         }
     }
@@ -237,7 +254,7 @@ bool online_rlbwt_from_file(std::string filepath, std::vector<char> &outputCharV
     char c; // Assume that the input character fits in char.
     unsigned char uc;
 
-    while (!bifs.is_end() )
+    while (!bifs.is_end())
     {
         bifs.get(c);
         uc = static_cast<unsigned char>(c);
@@ -300,17 +317,18 @@ template bool online_rlbwt_from_file<uint64_t>(std::string filepath, std::vector
 template bool online_rlbwt_from_file<int32_t>(std::string filepath, std::vector<char> &outputCharVec, std::vector<int32_t> &outputNumVec, int outputType);
 template bool online_rlbwt_from_file<int64_t>(std::string filepath, std::vector<char> &outputCharVec, std::vector<int64_t> &outputNumVec, int outputType);
 
-
-std::string load(std::string filepath){
+std::string load(std::string filepath)
+{
     char c;
-  std::string s2;
-  backward_ifstream bifs(filepath);
-  while(!bifs.is_end()){
-    bifs.get(c);
-    s2.push_back(c);
-  }
-  bifs.close();
-  std::reverse(s2.begin(), s2.end());
-  return s2;
+    std::string s2;
+    backward_ifstream bifs(filepath);
+    while (!bifs.is_end())
+    {
+        bifs.get(c);
+        s2.push_back(c);
+    }
+    bifs.close();
+    std::reverse(s2.begin(), s2.end());
+    return s2;
 }
 } // namespace itmmti
