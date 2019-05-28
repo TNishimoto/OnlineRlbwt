@@ -242,27 +242,28 @@ public:
     }
     return true;
   }
-  void invert(std::vector<char> &cVec, std::vector<uint64_t> &numVec, int formatType) const noexcept
+  template <typename INDEX = uint64_t >
+  void invert(std::vector<char> &cVec, std::vector<INDEX> &numVec, int formatType) const noexcept
   {
     cVec.resize(0);
     numVec.resize(0);
     bool increasing_sequence_format = formatType == 1;
-    uint64_t sum = 0;
+    INDEX sum = 0;
     if (increasing_sequence_format)
       numVec.push_back(sum);
 
-    uint64_t pos = 0;
-    char c = 0;
-    uint64_t num = 0;
+    INDEX pos = 0;
+    unsigned char c = 0;
+    INDEX num = 0;
     //std::vector<char> cVec;
     //std::vector<uint64_t> numVec;
     //uint64_t runSize = 0;
 
-    for (uint64_t i = 0; i < this->getLenWithEndmarker(); ++i)
+    for (INDEX i = 0; i < this->getLenWithEndmarker(); ++i)
     {
       //pos -= (pos > emPos_);
       //const uint64_t idxM = drle_.searchPosM(pos);
-      const auto ch = (*this)[i];
+      const auto ch = static_cast<unsigned char>((*this)[i]);
       if (c != ch)
       {
         if (num != 0)

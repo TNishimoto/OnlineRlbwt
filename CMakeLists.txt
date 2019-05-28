@@ -63,6 +63,9 @@ add_library(online_rlbwt STATIC online_rlbwt.cpp)
 target_link_libraries(online_rlbwt Basics)
 target_link_libraries(online_rlbwt BTree)
 
+add_executable(test.out test_main.cpp)
+target_link_libraries(test.out online_rlbwt)
+
 
 #### TEST
 #### To enable this, add "-DTESTING=1" or "-DTESTING_ALL=1" (for testing all subprojects) when running cmake
