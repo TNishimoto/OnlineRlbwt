@@ -53,15 +53,7 @@ public:
         _size = textSize;
 
         this->buffer.resize(backward_ifstream::BufferSize, 0);
-        //std::cout << this->buffer.size() << "/" <<  backward_ifstream::BufferSize<< std::endl;
         this->buffering();
-        //std::cout << this->buffer.size() << "/" <<  backward_ifstream::BufferSize<< std::endl;
-        //std::cout << this->is_end() << std::endl;
-        //for(int64_t i=local_pos;i>=0;i--){
-        //std::cout << std::to_string(this->buffer[i]) << "," ;
-        //std::cout << (this->buffer[i] == 0 ? '0' : this->buffer[i]);
-        //}
-        //std::cout << std::endl;
     }
     int64_t size()
     {
@@ -178,7 +170,7 @@ bool online_rlbwt(std::string &text, std::vector<char> &outputCharVec, std::vect
     double sec = std::chrono::duration_cast<std::chrono::seconds>(t2 - t1).count();
     std::cout << "RLBWT construction done. " << sec << " sec" << std::endl;
 
-    rlbwt.printStatistics(std::cout, false);
+    //rlbwt.printStatistics(std::cout, false);
 
     rlbwt.invert(outputCharVec, outputNumVec, outputType);
     std::reverse(text.begin(), text.end());
@@ -205,32 +197,10 @@ std::string online_bwt(std::string &text)
     }
     return s;
 }
-/*
-template <typename INDEX>
-bool online_rlbwt1(std::string &text, std::vector<char> &outputCharVec, std::vector<INDEX> &outputNumVec, int outputType){
-
-}
-*/
 
 template <typename INDEX>
 bool online_rlbwt_from_file(std::string filepath, std::vector<char> &outputCharVec, std::vector<INDEX> &outputNumVec, int outputType)
-//bool online_rlbwt_from_file(std::string filepath, std::vector<char> &outputCharVec, std::vector<uint64_t> &outputNumVec, int outputType)
 {
-    /*
-    cmdline::parser parser;
-    parser.add<std::string>("input", 'i', "input file name", true);
-    parser.add<std::string>("output", 'o', "output file name", false);
-    parser.add<bool>("check", 0, "check correctness", false, 0);
-    parser.add<bool>("verbose", 'v', "verbose", false, 0);
-    parser.add("help", 0, "print help");
-
-    parser.parse_check(argc, argv);
-    */
-    //const std::string in = filepath;
-    //const std::string in = parser.get<std::string>("input");
-    //const std::string out = parser.get<std::string>("output");
-    //const bool check = parser.get<bool>("check");
-    //const bool verbose = parser.get<bool>("verbose");
     const bool verbose = false;
 
     auto t1 = std::chrono::high_resolution_clock::now();
@@ -278,38 +248,8 @@ bool online_rlbwt_from_file(std::string filepath, std::vector<char> &outputCharV
         std::cout << "RLBWT construction done. " << sec << " sec" << std::endl;
     }
 
-    rlbwt.printStatistics(std::cout, false);
-    //t1 = std::chrono::high_resolution_clock::now();
-    //std::cout << "Decompressing RLBWT ..." << std::endl;
-    //std::ofstream ofs(out, std::ios::out);
     rlbwt.invert(outputCharVec, outputNumVec, outputType);
 
-    //auto t2 = std::chrono::high_resolution_clock::now();
-    //double sec = std::chrono::duration_cast<std::chrono::seconds>(t2 - t1).count();
-    //std::cout << "RLBWT decompression done. " << sec << " sec" << std::endl;
-    /*
-    if (!(out.empty()))
-    {
-        
-    }
-
-    if (check)
-    { // check correctness
-        t1 = std::chrono::high_resolution_clock::now();
-        std::cout << "Checking RLBWT inversion ..." << std::endl;
-        std::ifstream ifssss(in);
-        if (rlbwt.checkDecompress(ifssss))
-        {
-            auto t2 = std::chrono::high_resolution_clock::now();
-            double sec = std::chrono::duration_cast<std::chrono::seconds>(t2 - t1).count();
-            std::cout << "RLBWT decompressed correctly. " << sec << " sec" << std::endl;
-        }
-        else
-        {
-            std::cout << "RLBWT inversion failed." << std::endl;
-        }
-    }
-    */
     return true;
 }
 template bool online_rlbwt_from_file<uint32_t>(std::string filepath, std::vector<char> &outputCharVec, std::vector<uint32_t> &outputNumVec, int outputType);
