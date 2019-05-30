@@ -1,5 +1,5 @@
 project(OnlineRlbwt)
-# set(CMAKE_VERBOSE_MAKEFILE 1)
+
 cmake_minimum_required(VERSION 3.1)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -128,3 +128,7 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     message(WARNING "doxygen binary couldn't be found")
   endif(DOXYGEN_FOUND)
 endif(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+
+
+install (TARGETS online_rlbwt DESTINATION bin)
+install (FILES online_rlbwt.hpp DESTINATION include)
