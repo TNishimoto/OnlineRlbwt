@@ -130,4 +130,4 @@ endif(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
 
 install (TARGETS online_rlbwt DESTINATION bin)
-install (FILES online_rlbwt.hpp DESTINATION include)
+install (FILES online_rlbwt.hpp DESTINATION include/OnlineRlbwt)
