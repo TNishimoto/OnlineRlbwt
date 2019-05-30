@@ -5,8 +5,6 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF) ## on g++ this ensures: -std=c++11 and not -std=gnu++11
 
-file(COPY ${CMAKE_SOURCE_DIR}/module/Basics_write/CMakeLists.txt DESTINATION ${CMAKE_SOURCE_DIR}/module/Basics)
-file(COPY ${CMAKE_SOURCE_DIR}/module/BTree_write/CMakeLists.txt DESTINATION ${CMAKE_SOURCE_DIR}/module/BTree)
 
 #### Build setting
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)

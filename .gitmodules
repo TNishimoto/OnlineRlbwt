@@ -1,6 +1,6 @@
-[submodule "Basics2"]
-	path = module/Basics
-	url = https://github.com/itomomoti/Basics.git
-[submodule "BTree2"]
+[submodule "BTree3"]
 	path = module/BTree
-	url = https://github.com/itomomoti/BTree.git
+	url = https://github.com/TNishimoto/BTree.git
+[submodule "Basics3"]
+	path = module/Basics
+	url = https://github.com/TNishimoto/Basics.git
