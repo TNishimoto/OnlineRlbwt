@@ -1,12 +1,11 @@
-project(OnlineRlbwt)
-
+project(BTree)
+# set(CMAKE_VERBOSE_MAKEFILE 1)
 cmake_minimum_required(VERSION 3.1)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF) ## on g++ this ensures: -std=c++11 and not -std=gnu++11
 
-file(COPY ${CMAKE_SOURCE_DIR}/module/Basics_write/CMakeLists.txt DESTINATION ${CMAKE_SOURCE_DIR}/module/Basics)
-file(COPY ${CMAKE_SOURCE_DIR}/module/BTree_write/CMakeLists.txt DESTINATION ${CMAKE_SOURCE_DIR}/module/BTree)
+
 
 #### Build setting
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
@@ -25,49 +24,21 @@ endif()
 
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+add_library(${PROJECT_NAME} STATIC
+  TagRelabelAlgo.cpp
+)
 
 
 
 #### Modules
-if(NOT MYMOD_DIR)
+if(NOT MYMOD_SOURCE_DIR)
   set(MYMOD_SOURCE_DIR ${CMAKE_SOURCE_DIR}/module)
   set(MYMOD_BINARY_DIR ${CMAKE_BINARY_DIR}/module)
   add_subdirectory(${MYMOD_SOURCE_DIR}/Basics ${MYMOD_BINARY_DIR}/Basics)
-  add_subdirectory(${MYMOD_SOURCE_DIR}/BTree ${MYMOD_BINARY_DIR}/BTree)
 endif()
 include_directories(${MYMOD_SOURCE_DIR}/Basics)
-include_directories(${MYMOD_SOURCE_DIR}/BTree)
 
 
-
-#### Executable
-#add_executable(OnlineRlbwt OnlineRlbwt.cpp)
-#target_link_libraries(OnlineRlbwt Basics)
-#target_link_libraries(OnlineRlbwt BTree)
-
-#add_executable(OnlineLz77ViaRlbwt OnlineLz77ViaRlbwt.cpp)
-#target_link_libraries(OnlineLz77ViaRlbwt Basics)
-#target_link_libraries(OnlineLz77ViaRlbwt BTree)
-
-#add_executable(DecompressLz77 DecompressLz77.cpp)
-
-#add_executable(OnlineRindex OnlineRindex.cpp)
-#target_link_libraries(OnlineRindex Basics)
-#target_link_libraries(OnlineRindex BTree)
-
-#add_executable(OnlineRindex_Demo OnlineRindex_Demo.cpp)
-#target_link_libraries(OnlineRindex_Demo Basics)
-#target_link_libraries(OnlineRindex_Demo BTree)
-
-
-add_library(online_rlbwt STATIC online_rlbwt.cpp)
-target_link_libraries(online_rlbwt Basics)
-target_link_libraries(online_rlbwt BTree)
-
-if(NOT MYMOD_DIR)
-add_executable(test.out test_main.cpp)
-target_link_libraries(test.out online_rlbwt)
-endif()
 
 #### TEST
 #### To enable this, add "-DTESTING=1" or "-DTESTING_ALL=1" (for testing all subprojects) when running cmake
@@ -104,6 +75,9 @@ if(TESTING OR TESTING_ALL)
 
     add_subdirectory(test)
     enable_testing()
+
+    add_test(NAME PSumWithValue_Test COMMAND PSumWithValue_Test)
+    # add_test(NAME PSum_Test COMMAND PSum_Test)
   endif()
 endif()
 
@@ -131,5 +105,4 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 endif(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
 
-install (TARGETS online_rlbwt DESTINATION bin)
-install (FILES online_rlbwt.hpp DESTINATION include)
+install (TARGETS BTree DESTINATION bin)

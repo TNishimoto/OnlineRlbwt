@@ -1,0 +1,6 @@
+[submodule "Basics2"]
+	path = module/Basics
+	url = https://github.com/itomomoti/Basics.git
+[submodule "BTree2"]
+	path = module/BTree
+	url = https://github.com/itomomoti/BTree.git
