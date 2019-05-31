@@ -129,5 +129,5 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 endif(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
 
-install (TARGETS online_rlbwt DESTINATION bin)
+install (TARGETS online_rlbwt DESTINATION lib)
 install (FILES online_rlbwt.hpp DESTINATION include/OnlineRlbwt)
