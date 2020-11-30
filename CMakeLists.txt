@@ -74,8 +74,8 @@ if(NOT MYMOD_DIR)
 add_executable(test.out test_main.cpp)
 target_link_libraries(test.out online_rlbwt)
 
-add_executable(compress.out compress_main.cpp)
-target_link_libraries(compress.out online_rlbwt)
+add_executable(online_bwt.out online_bwt_main.cpp)
+target_link_libraries(online_bwt.out online_rlbwt)
 endif()
 
 #### TEST
