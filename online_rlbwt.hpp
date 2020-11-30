@@ -54,6 +54,8 @@ std::string online_bwt(std::string &text);
 template <typename INDEX>
 bool online_rlbwt_from_file(std::string filepath, std::vector<char> &outputCharVec, std::vector<INDEX> &outputNumVec, int outputType);
 
+std::pair<uint64_t, uint64_t> online_bwt_from_file(std::string inputPath, std::string outputPath, bool verbose);
+
 
 
 template <typename INDEX>

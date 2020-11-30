@@ -73,6 +73,9 @@ target_link_libraries(online_rlbwt BTree)
 if(NOT MYMOD_DIR)
 add_executable(test.out test_main.cpp)
 target_link_libraries(test.out online_rlbwt)
+
+add_executable(compress.out compress_main.cpp)
+target_link_libraries(compress.out online_rlbwt)
 endif()
 
 #### TEST
@@ -139,3 +142,4 @@ endif(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
 install (TARGETS online_rlbwt DESTINATION lib)
 install (FILES online_rlbwt.hpp DESTINATION include/OnlineRlbwt)
+

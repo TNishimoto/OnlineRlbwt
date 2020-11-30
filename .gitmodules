@@ -4,3 +4,6 @@
 [submodule "Basics3"]
 	path = module/Basics
 	url = https://github.com/TNishimoto/Basics.git
+[submodule "module/stool"]
+	path = module/stool
+	url = https://github.com/TNishimoto/stool

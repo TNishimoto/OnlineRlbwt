@@ -198,6 +198,67 @@ std::string online_bwt(std::string &text)
     return s;
 }
 
+std::pair<uint64_t, uint64_t> online_bwt_from_file(std::string inputPath, std::string outputPath, bool verbose)
+{
+    //const bool verbose = false;
+
+    auto t1 = std::chrono::high_resolution_clock::now();
+    std::cout << "Building BWT ..." << std::endl;
+
+    //std::ifstream ifs(in);
+    backward_ifstream bifs(inputPath);
+
+    size_t j = 0;
+    const size_t step = 100000000; // print status every step characters
+    size_t last_step = 0;
+
+    using BTreeNodeT = BTreeNode<32>;
+    using BtmNodeMT = BtmNodeM_StepCode<BTreeNodeT, 32>;
+    using BtmMInfoT = BtmMInfo_BlockVec<BtmNodeMT, 512>;
+    using BtmNodeST = BtmNodeS<BTreeNodeT, uint32_t, 8>;
+    using BtmSInfoT = BtmSInfo_BlockVec<BtmNodeST, 1024>;
+    using DynRleT = DynRleForRlbwt<WBitsBlockVec<1024>, Samples_Null, BtmMInfoT, BtmSInfoT>;
+    OnlineRlbwt<DynRleT> rlbwt(1);
+
+    char c; // Assume that the input character fits in char.
+    unsigned char uc;
+
+    while (!bifs.is_end())
+    {
+        bifs.get(c);
+        uc = static_cast<unsigned char>(c);
+        if (verbose)
+        {
+            if (j > last_step + (step - 1))
+            {
+                auto t2 = std::chrono::high_resolution_clock::now();
+                double sec = std::chrono::duration_cast<std::chrono::seconds>(t2 - t1).count();
+
+                last_step = j;
+                std::cout << " " << j << " characters processed ...[" << sec << " sec]" << std::endl;
+            }
+        }
+
+        rlbwt.extend(uint8_t(uc));
+        ++j;
+    }
+
+    bifs.close();
+    {
+        auto t2 = std::chrono::high_resolution_clock::now();
+        double sec = std::chrono::duration_cast<std::chrono::seconds>(t2 - t1).count();
+        std::cout << "RLBWT construction done. " << sec << " sec" << std::endl;
+    }
+
+    std::ofstream out(outputPath, std::ios::out | std::ios::binary);
+    uint64_t runCount = rlbwt.write_bwt(out, verbose);
+    out.close();
+
+    return std::pair<uint64_t, uint64_t>(j, runCount);
+
+}
+
+
 template <typename INDEX>
 bool online_rlbwt_from_file(std::string filepath, std::vector<char> &outputCharVec, std::vector<INDEX> &outputNumVec, int outputType)
 {
