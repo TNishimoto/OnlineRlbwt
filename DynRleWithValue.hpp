@@ -438,7 +438,9 @@ namespace itmmti
           for (uint64_t i = 0; i < (stccSize_ + 63) / 64; ++i) {
             os << "(" << i << ")";
             for (uint64_t j = 0; j < 64; ++j) {
-              os << bits::readWBits_S(stcc_.getConstPtr_vals(), 64 * i + 63 - j, ctcbits::UINTW_MAX(1));
+              //os << bits::readWBits_S(stcc_.getConstPtr_vals(), 64 * i + 63 - j, ctcbits::UINTW_MAX(1));
+              os << bits::readWBits_S(stcc_.getConstPtr_vals(), 64 * i + 63 - j, 1);
+
             }
             os << " ";
           }
@@ -494,7 +496,9 @@ namespace itmmti
           for (uint64_t i = 0; i < (stccSize_ + 63) / 64; ++i) {
             os << "(" << i << ")";
             for (uint64_t j = 0; j < 64; ++j) {
-              os << bits::readWBits_S(stcc_.getConstPtr_vals(), 64 * i + 63 - j, ctcbits::UINTW_MAX(1));
+              //os << bits::readWBits_S(stcc_.getConstPtr_vals(), 64 * i + 63 - j, ctcbits::UINTW_MAX(1));
+              os << bits::readWBits_S(stcc_.getConstPtr_vals(), 64 * i + 63 - j, 1);
+
             }
             os << " ";
           }

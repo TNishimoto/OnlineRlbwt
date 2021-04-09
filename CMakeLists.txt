@@ -6,8 +6,13 @@ cmake_minimum_required(VERSION 3.1)
 endif(CMAKE_OLD)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF) ## on g++ this ensures: -std=c++11 and not -std=gnu++11
+set(CMAKE_CXX_EXTENSIONS ON) ## on g++ this ensures: -std=c++11 and not -std=gnu++11
 
+get_cmake_property(_variableNames CACHE_VARIABLES)
+list (SORT _variableNames)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
 
 if(CPP_STATIC)
 set(CMAKE_CXX_FLAGS "-m64 -Wall -Wextra -static")
