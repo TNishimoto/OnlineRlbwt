@@ -1,7 +1,7 @@
 #include <cassert>
 #include <chrono>
-#include "module/stool/src/io.hpp"
-#include "module/stool/src/cmdline.h"
+#include "stool/include/io.hpp"
+#include "stool/include/cmdline.h"
 #include "online_rlbwt.hpp"
 
 using namespace std;

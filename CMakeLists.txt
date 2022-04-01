@@ -14,6 +14,9 @@ foreach (_variableName ${_variableNames})
     message(STATUS "${_variableName}=${${_variableName}}")
 endforeach()
 
+
+
+
 if(CPP_STATIC)
 set(CMAKE_CXX_FLAGS "-m64 -Wall -Wextra -static")
 else(CPP_STATIC)
@@ -33,21 +36,52 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g -ggdb -Ofast -fstrict-aliasing -march=native")
 endif()
 
+# Set PROJECT_IS_TOP_LEVEL to ON if if this is the top level project (not
+# if this is included as a subproject of something else). Note that this is
+# handled automatically for CMake >= 3.21.
+if (CMAKE_VERSION VERSION_LESS 3.21)
+    if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
+        message("SET PROJECT_IS_TOP_LEVEL ON IN ${PROJECT_NAME}")
+        set (PROJECT_IS_TOP_LEVEL ON)
+    else()
+        message("SET PROJECT_IS_TOP_LEVEL OFF IN ${PROJECT_NAME}")
+    set (PROJECT_IS_TOP_LEVEL OFF)    
+    endif()
+endif ()
 
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
+if (NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "")
+    message("Release Mode")
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
+endif()
+
+if(NOT TARGET stool)
+add_subdirectory(module/stool)
+endif()
+
+if(NOT TARGET Basics)
+add_subdirectory(module/Basics)
+endif()
+
+if(NOT TARGET BTree)
+add_subdirectory(module/BTree)
+endif()
+
 
 
 #### Modules
-if(NOT MYMOD_DIR)
-  set(MYMOD_SOURCE_DIR ${CMAKE_SOURCE_DIR}/module)
-  set(MYMOD_BINARY_DIR ${CMAKE_BINARY_DIR}/module)
-  add_subdirectory(${MYMOD_SOURCE_DIR}/Basics ${MYMOD_BINARY_DIR}/Basics)
-  add_subdirectory(${MYMOD_SOURCE_DIR}/BTree ${MYMOD_BINARY_DIR}/BTree)
-endif()
-include_directories(${MYMOD_SOURCE_DIR}/Basics)
-include_directories(${MYMOD_SOURCE_DIR}/BTree)
+#if(NOT MYMOD_DIR)
+#  set(MYMOD_SOURCE_DIR ${CMAKE_SOURCE_DIR}/module)
+#  set(MYMOD_BINARY_DIR ${CMAKE_BINARY_DIR}/module)
+#  add_subdirectory(${MYMOD_SOURCE_DIR}/Basics ${MYMOD_BINARY_DIR}/Basics)
+#  add_subdirectory(${MYMOD_SOURCE_DIR}/BTree ${MYMOD_BINARY_DIR}/BTree)
+#endif()
+include_directories(module/Basics)
+include_directories(module/BTree)
+include_directories(module)
+#include_directories(module/BTree)
 
 
 
@@ -75,13 +109,23 @@ add_library(online_rlbwt STATIC online_rlbwt.cpp)
 target_link_libraries(online_rlbwt Basics)
 target_link_libraries(online_rlbwt BTree)
 
-if(NOT MYMOD_DIR)
+if (PROJECT_IS_TOP_LEVEL)
 add_executable(test.out test_main.cpp)
 target_link_libraries(test.out online_rlbwt)
 
 add_executable(online_bwt.out online_bwt_main.cpp)
 target_link_libraries(online_bwt.out online_rlbwt)
 endif()
+
+
+
+#if(NOT MYMOD_DIR)
+#add_executable(test.out test_main.cpp)
+#target_link_libraries(test.out online_rlbwt)
+#
+#add_executable(online_bwt.out online_bwt_main.cpp)
+#target_link_libraries(online_bwt.out online_rlbwt)
+#endif()
 
 #### TEST
 #### To enable this, add "-DTESTING=1" or "-DTESTING_ALL=1" (for testing all subprojects) when running cmake
