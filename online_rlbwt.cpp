@@ -22,6 +22,13 @@
 //#include "cmdline.h"
 #include "OnlineRlbwt.hpp"
 #include "DynRleForRlbwt.hpp"
+#ifdef __linux__
+#include <malloc.h>
+#elif defined(__APPLE__)
+#include <stdlib.h>
+#include <malloc/malloc.h>
+#endif
+
 
 using namespace itmmti;
 
@@ -253,6 +260,20 @@ std::pair<uint64_t, uint64_t> online_bwt_from_file(std::string inputPath, std::s
     std::ofstream out(outputPath, std::ios::out | std::ios::binary);
     uint64_t runCount = rlbwt.write_bwt(out, verbose);
     out.close();
+
+
+	{
+#ifdef __linux__
+		struct mallinfo mi = mallinfo();
+		std::cout << "Total allocated space: " << mi.uordblks << " bytes" << std::endl;
+#elif defined(__APPLE__)
+		malloc_zone_t *zone = malloc_default_zone();
+		malloc_statistics_t stats;
+		malloc_zone_statistics(zone, &stats);
+		std::cout << "Total allocated space: " << (stats.size_in_use / 1000) << "KB" << std::endl;
+#endif
+	}
+
 
     return std::pair<uint64_t, uint64_t>(j, runCount);
 
