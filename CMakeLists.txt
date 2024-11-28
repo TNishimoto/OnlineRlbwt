@@ -57,9 +57,9 @@ if (NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "")
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
 endif()
 
-if(NOT TARGET stool)
-add_subdirectory(module/stool)
-endif()
+#if(NOT TARGET stool)
+#add_subdirectory(module/stool)
+#endif()
 
 if(NOT TARGET Basics)
 add_subdirectory(module/Basics)
@@ -115,6 +115,14 @@ target_link_libraries(test.out online_rlbwt)
 
 add_executable(online_bwt.out online_bwt_main.cpp)
 target_link_libraries(online_bwt.out online_rlbwt)
+
+add_executable(OnlineRindex OnlineRindex.cpp)
+target_link_libraries(OnlineRindex Basics)
+target_link_libraries(OnlineRindex BTree)
+
+add_executable(OnlineRindex_Demo OnlineRindex_Demo.cpp)
+target_link_libraries(OnlineRindex_Demo Basics)
+target_link_libraries(OnlineRindex_Demo BTree)
 endif()
 
 

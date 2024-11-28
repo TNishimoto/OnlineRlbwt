@@ -1,8 +1,6 @@
 #include <cassert>
 #include <chrono>
-#include "module/stool/include/io.hpp"
-#include "module/stool/include/cmdline.h"
-#include "module/stool/include/memory.hpp"
+#include "./module/stool/include/light_stool.hpp"
 
 #include "online_rlbwt.hpp"
 

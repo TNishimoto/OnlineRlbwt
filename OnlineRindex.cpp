@@ -23,6 +23,12 @@
 #include "DynRleForRlbwt.hpp"
 #include "DynSuccForRindex.hpp"
 
+#ifdef __linux__
+#include <malloc.h>
+#elif defined(__APPLE__)
+#include <stdlib.h>
+#include <malloc/malloc.h>
+#endif
 
 using namespace itmmti;
 using SizeT = uint64_t; // Text length should fit in SizeT.
@@ -99,6 +105,18 @@ int main(int argc, char *argv[])
   double sec = std::chrono::duration_cast<std::chrono::seconds>(t2 - t1).count();
   std::cout << "R-index construction done. " << sec << " sec" << std::endl;
   rindex.printStatistics(std::cout, false);
+
+	{
+#ifdef __linux__
+		struct mallinfo mi = mallinfo();
+		std::cout << "Total allocated space: " << mi.uordblks << " bytes" << std::endl;
+#elif defined(__APPLE__)
+		malloc_zone_t *zone = malloc_default_zone();
+		malloc_statistics_t stats;
+		malloc_zone_statistics(zone, &stats);
+		std::cout << "Total allocated space: " << (stats.size_in_use / 1000) << "KB" << std::endl;
+#endif
+	}
 
   if (check) { // check correctness
     t1 = std::chrono::high_resolution_clock::now();
