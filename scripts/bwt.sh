@@ -15,7 +15,7 @@ for file in $INPUTDIR/*; do
     if [ -f "$file" ]; then
         echo "Full path: $(realpath "$file")"
         echo "File name: $(basename "$file")"
-      $SCRIPT_DIR/../build/online_bwt.out -i $INPUTDIR/$(basename "$file") -o $OUTPUTDIR/$(basename "$file")
+      $SCRIPT_DIR/../build/online_bwt.out -i $INPUTDIR/$(basename "$file") -o $OUTPUTDIR/$(basename "$file").bwt
     fi
 done
 
