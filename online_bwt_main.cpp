@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     std::cout << "The number of runs : " << runCount << std::endl;
     std::cout << "Excecution time : " << elapsed << "ms";
     std::cout << "[" << charperms << "chars/ms]" << std::endl;
-    stool::print_memory_usage();
+    stool::Memory::print_memory_usage();
     std::cout << "==================================" << std::endl;
     std::cout << "\033[39m" << std::endl;
 }
